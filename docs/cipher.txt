@@ -1,0 +1,126 @@
+Cipher Module Design (Team Member D) - Dmitry Kornilov
+====================================
+
+1. Purpose / Responsibility Boundary
+------------------------------------
+The cipher module is responsible only for:
+- Loading and validating a substitution cipher key from a key file.
+- Deciphering (decrypting) an input string using the loaded key.
+
+The cipher module is NOT responsible for:
+- Reading mission data files (handled by FileHandler).
+- Parsing command line arguments (handled by UserInterface).
+- Choosing which mission file to open or listing mission files (handled by ProgramControl).
+
+2. Inputs and Outputs
+---------------------
+Inputs:
+- A cipher key file path (optional).
+  - If not provided, the default key file is used.
+- A ciphered text string that should be converted into readable text.
+
+Outputs:
+- A deciphered (readable) string.
+
+Error Outputs:
+- If the key file cannot be read or is invalid, the cipher module signals failure via an exception
+  (InvalidCipherKeyException). ProgramControl decides how to display an error message and exit.
+
+3. File Locations and Defaults
+------------------------------
+Default cipher key file:
+- ciphers/key.txt
+
+Alternate cipher key file:
+- The overall program supports a second command-line parameter that specifies an alternate key path.
+  ProgramControl will pass that key path string into the cipher module’s factory/loader.
+
+Notes:
+- The cipher module only accesses files in the ciphers/ folder (or an explicit alternate key path).
+- The cipher module does not access the data/ folder.
+
+4. Key File Format
+------------------
+The key file must contain two lines:
+
+Line 1: Plaintext characters (the “actual” letters)
+Line 2: Ciphertext characters (the “cipher match” letters)
+
+Example (conceptual):
+Line 1: ABCDEFG...
+Line 2: QWERTYU...
+
+Deciphering rule:
+- Each character in Line 2 maps back to the corresponding character in Line 1 at the same index.
+- This creates a mapping: cipherChar -> actualChar
+
+5. Validation Rules
+-------------------
+When loading a key file, the following validations are performed:
+
+V1) File exists and is readable.
+V2) The file contains at least two lines.
+V3) Line 1 and Line 2 are non-empty.
+V4) Line 1 and Line 2 have the same length.
+V5) Line 1 contains no duplicate characters.
+V6) Line 2 contains no duplicate characters.
+
+Rationale:
+- V4 ensures each cipher character has exactly one plaintext match.
+- V5/V6 ensure a one-to-one substitution (no ambiguity in mapping).
+
+If any validation fails, loading the key fails and an InvalidCipherKeyException is thrown.
+
+6. Decipher Behavior
+--------------------
+Given an input string:
+- For each character c in the input:
+  - If c exists in the cipher->actual map, replace it with the mapped plaintext character.
+  - Otherwise, leave c unchanged.
+
+This means spaces, punctuation, digits, and any characters not present in the cipher line are passed
+through unchanged.
+
+Case handling:
+- Baseline requirement: decipher exact characters as provided by the key file.
+- Optional enhancement (allowed as long as tests cover it): if the key uses uppercase letters,
+  decipher lowercase input by mapping the uppercase version and preserving lowercase output.
+  Example: if 'X' -> 'A', then 'x' -> 'a'.
+
+7. Public API / How Other Modules Use This
+------------------------------------------
+The cipher module exposes a small interface so other modules do not depend on implementation details.
+
+Suggested interface:
+- Cipher.decipher(String input) -> String
+
+Suggested construction:
+- CipherFactory.fromKeyPath(String keyPathOrNull) -> Cipher
+  - If keyPathOrNull is null/blank, it loads the default ciphers/key.txt
+  - Otherwise it loads the provided path
+
+ProgramControl usage (conceptual):
+- Cipher cipher = CipherFactory.fromKeyPath(optionalKeyPathFromArgs);
+- String readable = cipher.decipher(fileContents);
+
+8. Testing Plan (Summary)
+-------------------------
+Unit tests will cover:
+- Loading a valid key file produces correct cipher->actual mappings.
+- Missing/unreadable key file throws InvalidCipherKeyException.
+- Key file with <2 lines throws InvalidCipherKeyException.
+- Key file with different line lengths throws InvalidCipherKeyException.
+- Duplicate chars in either line throws InvalidCipherKeyException.
+- Decipher replaces mapped characters correctly.
+- Decipher leaves unmapped characters unchanged.
+- (If implemented) lowercase preservation behavior is tested.
+
+9. Assumptions and Non-Goals
+----------------------------
+Assumptions:
+- Key file lines are used exactly as-is; no trimming is required beyond newline handling.
+- The cipher module does not print to the console.
+
+Non-goals:
+- No encryption (ciphering) is required; only deciphering is needed for this assignment.
+- No file listing or file numbering logic exists in this module.
