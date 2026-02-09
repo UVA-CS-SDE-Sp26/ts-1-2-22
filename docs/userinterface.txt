@@ -1,0 +1,3 @@
+//psuedo code
+//tests for the user
+//test for no argument, basics
