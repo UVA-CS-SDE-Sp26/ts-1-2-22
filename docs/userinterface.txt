@@ -1,3 +1,22 @@
 //psuedo code
+UserInterface — Plain English
+
+Start the program with some input (arguments).
+
+If there are no inputs:
+
+Show a list of files.
+
+If there is one input:
+
+If it’s a valid file number, show that file.
+
+If it’s not valid, show an error.
+
+If there are two inputs:
+
+Show the file using the second input as a key.
+
+After doing the action, finish the program and return 0 (success).
 //tests for the user
 //test for no argument, basics
