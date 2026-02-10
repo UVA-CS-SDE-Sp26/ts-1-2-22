@@ -1,0 +1,34 @@
+File Handler Design
+
+File handler is part of the program that deals with reading files and
+returning the raw file contents. It will handle:
+
+    1. Locating the data directory containing mission files
+    2. Listing all readable files in the data directory
+    3. Reading the contents of a requested file
+    4. Handling file-related errors (missing files, invalid input, unreadable files)
+    5. Return file data to Program Control
+
+public List<String> getFileList()
+    - Returns a sorted list of .txt filenames found in the data folder
+    - Filenames are returned without numbers
+    - If the folder doesn’t exist or has no files, an empty list is returned
+
+public String readFile(String fileName)
+    - Reads the entire contents of the given file and returns it as a String
+    - If the file does not exist or can’t be read, an exception is thrown
+
+Errors will be handled using null exceptions.
+
+
+
+
+
+
+
+
+
+
+
+
+
