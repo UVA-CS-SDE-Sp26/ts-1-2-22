@@ -1,0 +1,31 @@
+Program Control – Design & Testing Plan
+
+Responsibility:
+The ProgramControl component connects the command-line interface to the file handling
+logic. It does not directly access files or cipher logic. It coordinates program flow.
+
+Design:
+- ProgramControl receives parsed command-line arguments from the main entry point.
+- If no arguments are provided:
+  - Request a list of available files from FileHandler
+  - Display each file with a numbered index (01, 02, …)
+- If a file number is provided:
+  - Request the corresponding file contents from FileHandler
+  - Output the returned text to the console
+- If an invalid file number is provided:
+  - Display an error message and exit gracefully
+
+Dependencies:
+- FileHandler (provided by Team Member B)
+- CipherService (optional, injected if present)
+
+Testing Strategy:
+- FileHandler will be mocked in all tests
+- Tests will verify:
+  - Listing files when no arguments are provided
+  - Displaying file contents when a valid index is provided
+  - Graceful failure when an invalid index is provided
+- No tests will access the filesystem directly
+
+Exit Conditions:
+- Program exits after listing files, displaying file contents, or showing an error message
