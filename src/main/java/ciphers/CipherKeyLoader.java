@@ -7,7 +7,7 @@ import java.util.*;
 
 public final class CipherKeyLoader {
 
-    private CipherKeyLoader() {}
+    public CipherKeyLoader() {}
 
     /**
      * Loads a substitution cipher key file.

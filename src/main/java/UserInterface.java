@@ -9,19 +9,23 @@ public class UserInterface {
     public int run(String[] args) {
         try {
             if (args.length == 0) {
-                programControl.listAvailableFiles();
+                System.out.println(programControl.listAvailableFiles());
                 return 0;
             } else if (args.length == 1) {
-                programControl.displayFileByIndex(args[0]);
+                System.out.println(programControl.displayFileByIndex(args[0]));
                 return 0;
             } else if (args.length == 2) {
-                programControl.displayFileByIndex(args[0]);
+                //second argument, alternate key
+                System.out.println(programControl.displayFileByIndex(args[0], args[1]));
                 return 0;
             } else {
-                return 1;
+                System.out.println("Error: Too many arguments.");
+                return 0;
             }
         } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
             return 1;
         }
+
     }
 }
