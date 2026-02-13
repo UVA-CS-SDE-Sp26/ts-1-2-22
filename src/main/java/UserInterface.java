@@ -19,6 +19,7 @@ public class UserInterface {
                 return 0;
             } else {
                 System.out.println("Error: Too many arguments.");
+                return 0;
             }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());

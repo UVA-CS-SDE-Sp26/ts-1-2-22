@@ -20,3 +20,25 @@ Show the file using the second input as a key.
 After doing the action, finish the program and return 0 (success).
 //tests for the user
 //test for no argument, basics
+TopSecret Command Line Interface
+
+Usage:
+java topsecret
+    Displays list of available files
+
+java topsecret <fileNumber>
+    Displays contents of selected file using default key
+
+java topsecret <fileNumber> <keyFile>
+    Displays contents using specified cipher key
+
+Error Handling:
+- Invalid arguments → shows usage
+- File not found → displays error message
+- Invalid key → displays error message
+
+Responsibilities:
+- Parse command line arguments
+- Call ProgramControl
+- Display output
+- Handle errors
