@@ -1,27 +1,85 @@
-public class UserInterface {
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-    private ProgramControl programControl;
+public class UserInterfaceTest {
 
-    public UserInterface(ProgramControl programControl) {
-        this.programControl = programControl;
+    @Test
+    void testRunWithNoArguments() {
+        FileHandler fileHandler = new FileHandler();
+        ProgramControl programControl = new ProgramControl(fileHandler);
+
+        String[] args = {};
+
+        String result = programControl.run(args);
+
+        assertNotNull(result);
+        assertInstanceOf(String.class, result);
     }
 
-    public int run(String[] args) {
-        try {
-            if (args.length == 0) {
-                programControl.listAvailableFiles();
-                return 0;
-            } else if (args.length == 1) {
-                programControl.displayFileByIndex(args[0]);
-                return 0;
-            } else if (args.length == 2) {
-                programControl.displayFileByIndex(args[0]);
-                return 0;
-            } else {
-                return 1;
-            }
-        } catch (Exception e) {
-            return 1;
-        }
+    @Test
+    void testRunWithValidIndex() {
+        FileHandler fileHandler = new FileHandler();
+        ProgramControl programControl = new ProgramControl(fileHandler);
+
+        String[] args = {"1"};
+
+        String result = programControl.run(args);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testRunWithInvalidIndex() {
+        FileHandler fileHandler = new FileHandler();
+        ProgramControl programControl = new ProgramControl(fileHandler);
+
+        String[] args = {"100"};
+
+        String result = programControl.run(args);
+
+        assertNotNull(result);
+        assertInstanceOf(String.class, result);
+    }
+
+    @Test
+    void testRunWithNonNumericInput() {
+        FileHandler fileHandler = new FileHandler();
+        ProgramControl programControl = new ProgramControl(fileHandler);
+
+        String[] args = {"abc"};
+
+        String result = programControl.run(args);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testListAvailableFilesDoesNotCrash() {
+        FileHandler fileHandler = new FileHandler();
+        ProgramControl programControl = new ProgramControl(fileHandler);
+
+        assertDoesNotThrow(() -> {
+            programControl.listAvailableFiles();
+        });
+    }
+
+    @Test
+    void testDisplayFileByIndexDoesNotCrash() {
+        FileHandler fileHandler = new FileHandler();
+        ProgramControl programControl = new ProgramControl(fileHandler);
+
+        assertDoesNotThrow(() -> {
+            programControl.displayFileByIndex("1");
+        });
+    }
+
+    @Test
+    void testDisplayFileByIndexInvalidInputDoesNotCrash() {
+        FileHandler fileHandler = new FileHandler();
+        ProgramControl programControl = new ProgramControl(fileHandler);
+
+        assertDoesNotThrow(() -> {
+            programControl.displayFileByIndex("abc");
+        });
     }
 }
