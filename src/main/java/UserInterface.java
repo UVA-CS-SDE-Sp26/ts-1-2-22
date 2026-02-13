@@ -9,7 +9,7 @@ public class UserInterface {
     public int run(String[] args) {
         try {
             if (args.length == 0) {
-                System.out.println(programControl.listAvailableFiles(););
+                System.out.println(programControl.listAvailableFiles());
                 return 0;
             } else if (args.length == 1) {
                 System.out.println(programControl.displayFileByIndex(args[0]));
