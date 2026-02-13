@@ -1,13 +1,22 @@
 // Megha Saikrishnan, Team Member B, FileHandler implementation
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class FileHandler {
-    private static final String DATA_DIR = "data/";
+    private static final String DATA_DIR = "data" + File.separator;
 
     // returns a sorted list of .txt filenames (without numbers)
     public List<String> getFileList() {
+        Path targetFilePath = Paths.get(DATA_DIR);
+        //check if file exists, use the folder
         File folder = new File(DATA_DIR);
+        if(targetFilePath.toFile().exists()) {
+             folder = targetFilePath.toFile();
+        }else{
+            throw new RuntimeException("File not found!");
+        }
         List<String> fileList = new ArrayList<>();
     // filter for .txt files, case insensitive
         if (folder.exists() && folder.isDirectory()) {

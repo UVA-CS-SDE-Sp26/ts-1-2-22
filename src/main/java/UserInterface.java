@@ -15,7 +15,8 @@ public class UserInterface {
                 System.out.println(programControl.displayFileByIndex(args[0]));
                 return 0;
             } else if (args.length == 2) {
-                System.out.println(programControl.displayFileByIndex(args[0]));
+                //second argument, alternate key
+                System.out.println(programControl.displayFileByIndex(args[0], args[1]));
                 return 0;
             } else {
                 System.out.println("Error: Too many arguments.");

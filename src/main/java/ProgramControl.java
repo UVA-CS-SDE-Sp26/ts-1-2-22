@@ -1,5 +1,11 @@
 
+import ciphers.CipherKeyLoader;
+import ciphers.SubstitutionCipher;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 
 
 public class ProgramControl {
@@ -29,6 +35,7 @@ public class ProgramControl {
     }
 
     public String displayFileByIndex(String indexArg) {
+        String output = "";
         try {
             int index = Integer.parseInt(indexArg) - 1;
             List<String> files = fileHandler.getFileList();
@@ -36,14 +43,61 @@ public class ProgramControl {
             if (index < 0 || index >= files.size()) {
                 return "Error: Invalid file selection.";
             }
-
+            //load if its a cip file
             String filename = files.get(index);
-            return fileHandler.readFile(filename);
+            if(filename.endsWith(".cip")) {
+                CipherKeyLoader objectA = new CipherKeyLoader();
+                Path path = Paths.get("ciphers/key.txt");
+                Map<Character, Character> cipherObject = objectA.load(path);
+                SubstitutionCipher subCipher = new SubstitutionCipher(cipherObject);
+                output = subCipher.decipher(fileHandler.readFile(filename));
+
+            }else{
+                output = fileHandler.readFile(filename);
+            }
+
+            return output;
 
         } catch (NumberFormatException e) {
             return "Error: File selection must be a number.";
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+
     }
+    public String displayFileByIndex(String indexArg, String alternateKey) {
+
+        String output = "";
+            try {
+
+                int index = Integer.parseInt(indexArg) - 1;
+                List<String> files = fileHandler.getFileList();
+
+                if (index < 0 || index >= files.size()) {
+                    return "Error: Invalid file selection.";
+                }
+                //load if its a cip file
+                String filename = files.get(index);
+                if(filename.endsWith(".cip")) {
+                    CipherKeyLoader objectA = new CipherKeyLoader();
+                    Path path = Paths.get("ciphers/" + alternateKey);
+                    Map<Character, Character> cipherObject = objectA.load(path);
+                    SubstitutionCipher subCipher = new SubstitutionCipher(cipherObject);
+                     output =subCipher.decipher(fileHandler.readFile(filename));
+
+                }else{
+                     output = fileHandler.readFile(filename);
+                }
+
+                return output;
+
+            } catch (NumberFormatException e) {
+                return "Error: File selection must be a number.";
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+    }
+    //call load with default key or without, load(def key
 }
