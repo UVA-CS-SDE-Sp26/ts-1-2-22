@@ -1,34 +1,52 @@
 File Handler Design
+Megha Saikrishnan (hfe5ps), Member B, Group 22
 
 File handler is part of the program that deals with reading files and
 returning the raw file contents. It will handle:
 
     1. Locating the data directory containing mission files
-    2. Listing all readable files in the data directory
+    2. Listing all readable .txt files in the data directory
     3. Reading the contents of a requested file
-    4. Handling file-related errors (missing files, invalid input, unreadable files)
-    5. Return file data to Program Control
+    4. Handling file-related errors (missing files, unreadable files)
+    5. Returning file data to Program Control
+
+Public Methods:
 
 public List<String> getFileList()
-    - Returns a sorted list of .txt filenames found in the data folder
-    - Filenames are returned without numbers
-    - If the folder doesn’t exist or has no files, an empty list is returned
+    - Returns a sorted list of .txt filenames found in the data/ folder
+    - Filenames are returned without numbers (just the filename)
+    - Files are sorted alphabetically
+    - If the folder doesn't exist or has no files, return an empty list
 
 public String readFile(String fileName)
     - Reads the entire contents of the given file and returns it as a String
-    - If the file does not exist or can’t be read, an exception is thrown
+    - Expects the file to be in the data/ directory
+    - If the file does not exist or can't be read, throws an Exception with n
+      error message
 
-Errors will be handled using null exceptions.
+Error Handling:
+    - FileNotFoundException: thrown when requested file doesn't exist
+    - IOException: thrown when file exists but can't be read
+    - Both are wrapped in Exception with user-friendly messages
 
+Test Plan:
 
+getFileList() Tests:
+    1. Should find carnivore.txt and cointelpro.txt in data folder
+    2. Files should be returned in alphabetical order
+    3. Should return exactly 2 files for current data folder
 
+readFile() Tests:
+    4. Should read carnivore.txt without errors
+    5. Should read cointelpro.txt without errors
+    6. Should read both files sequentially without issues
+    7. Should throw exception when file doesn't exist
 
+Read by index Tests:
+    8. Should list files then read each by index
 
-
-
-
-
-
-
-
-
+Testing Approach:
+    - Tests use data files (carnivore.txt, cointelpro.txt)
+    - Each method has multiple test cases
+    - Error conditions are tested (missing files)
+    - Integration test validates interaction with other components
