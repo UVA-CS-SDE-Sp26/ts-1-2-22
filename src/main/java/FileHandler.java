@@ -11,7 +11,11 @@ public class FileHandler {
         List<String> fileList = new ArrayList<>();
     // filter for .txt files, case insensitive
         if (folder.exists() && folder.isDirectory()) {
-            File[] files = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
+            // Filter for .txt and .cip files (case-insensitive)
+            File[] files = folder.listFiles((dir, name) -> {
+                String lower = name.toLowerCase();
+                return lower.endsWith(".txt") || lower.endsWith(".cip");
+            });
             if (files != null) {
                 for (File f : files) {
                     fileList.add(f.getName());
