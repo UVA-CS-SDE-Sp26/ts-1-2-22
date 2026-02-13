@@ -1,0 +1,36 @@
+PURPOSE
+Load and validate a cipher key file and produce a mapping of cipher -> actual characters.
+
+FUNCTION load(keyPath) RETURNS Map<Character, Character>
+
+    TRY
+        lines ← read all lines from keyPath
+    CATCH read error
+        THROW InvalidCipherKeyException
+
+    IF number of lines < 2
+        THROW InvalidCipherKeyException
+
+    actualLine ← first line
+    cipherLine ← second line
+
+    IF actualLine is empty OR cipherLine is empty
+        THROW InvalidCipherKeyException
+
+    IF length(actualLine) ≠ length(cipherLine)
+        THROW InvalidCipherKeyException
+
+    IF actualLine contains duplicate characters
+        THROW InvalidCipherKeyException
+
+    IF cipherLine contains duplicate characters
+        THROW InvalidCipherKeyException
+
+    CREATE empty map cipherToActual
+
+    FOR i from 0 to length(cipherLine) - 1
+        cipherChar ← cipherLine[i]
+        actualChar ← actualLine[i]
+        cipherToActual[cipherChar] ← actualChar
+
+    RETURN cipherToActual

@@ -1,0 +1,28 @@
+PURPOSE
+Convert ciphered text into readable text using a provided mapping.
+
+CONSTRUCTOR SubstitutionCipher(map)
+    store map as cipherToActual
+
+FUNCTION decipher(inputString) RETURNS String
+
+    IF inputString is null
+        RETURN null
+
+    CREATE empty output string
+
+    FOR each character ch in inputString
+
+        IF ch exists in cipherToActual
+            append cipherToActual[ch] to output
+
+        ELSE
+            upper ← uppercase(ch)
+
+            IF ch is lowercase AND upper exists in cipherToActual
+                mapped ← cipherToActual[upper]
+                append lowercase(mapped) to output
+            ELSE
+                append ch unchanged
+
+    RETURN output
